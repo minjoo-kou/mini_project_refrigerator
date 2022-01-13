@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>상세페이지 | 나만의 냉장고</title>
+            <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+              integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+              crossorigin="anonymous">
+
+        <!-- JS -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+                integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+                crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+
+
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/js/tempusdominus-bootstrap-4.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/css/tempusdominus-bootstrap-4.min.css" />
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.css" />
+        <!-- 구글폰트 -->
+        <link href="https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Jua&display=swap" rel="stylesheet">
+
+        <!-- style -->
+    <style type="text/css">
+        * {
+            font-family: 'Jua', sans-serif;
+        }
+
+
+        .entire_background{
+            background-color: floralwhite;
+        }
+        .top{
+            background-color: cornflowerblue;
+            line-height: 20px;
+            color: white;
+        }
+        .bottom{
+            background-color: cornflowerblue;
+            height: 300px
+
+        }
+        .btn_back{
+            display: block;
+            color: white;
+            border: none;
+            background: none;
+            padding-bottom: 20px;
+        }
+
+        .content_container{
+            background-color: white;
+            border:solid;
+            border-color: cornflowerblue;
+            border-width: 3px;
+            border-radius: 10px;
+            width: 70%;
+            margin: 100px auto 150px auto;
+            padding-bottom: 20px;
+        }
+        .content{
+            padding-left:40px;
+            padding-right:40px;
+        }
+        .mini_jumbotron{
+            height: 30px;
+            text-align: center;
+        }
+        .content_footer{
+            margin: 40px auto 20px auto;
+            text-align: center;
+        }
+        .btn-primary{
+            width: 150px;
+            height: 50px;
+            font-size:20px;
+            margin-left:20px
+
+        }
+        .top-box {
+            height: 200px;
+            background-color: cornflowerblue;
+        }
+        .top_back {
+            display:inline-block;
+            margin-top: 30px;
+            margin-left:200px;
+            color: white;
+        }
+        .cursor {
+            cursor:pointer;
+        }
+        .back {
+            background-image: url("../static/image/background.jpg");
+            background-position: center;
+            background-size: cover;
+            background-attachment: fixed;
+        }
+    </style>
+    <script>
+
+        // 메인으로 가기 버튼
+        function to_main(){
+            window.location.href="/"
+        }
+
+        //지금 보고 있는 페이지 수정하기 버튼
+        function to_edit(){
+            window.location.href="/edit/{{ result['_id'] }}"
+        }
+
+
+    </script>
+
+</head>
+<body class="back">
+<!--    전체 색상-->
+    <div class="entire_background">
+
+    </div>
+<!--페이지 상단 (뒤로가기 버튼)-->
+    <div class="top-box">
+        <div class="top_back">
+            <button onclick="to_main()" class="btn_back cursor">
+                <i class="fa fa-arrow-left fa-3x" aria-hidden="true"></i>
+                </button><h1 class="cursor" onclick="to_main()">뒤로 가기</h1>
+        </div>
+    </div>
+<!--재료 상세 정보-->
+    <div class="content_container">
+        <!--        카드 상단-->
+        <div class="jumbotron jumbotron-fluid top mini_jumbotron">
+
+            <h2> {{ result['name'] }} </h2>
+        </div>
+    <!--        세부 정보란-->
+    <div class="content">
+        <form>
+            <!--                재료명-->
+            <div class="form-group row">
+            <label for="staticName" class="col-sm-2 col-form-label">재료명</label>
+            <div class="col-sm-10">
+              <input type="text" readonly class="form-control-plaintext" id="staticName" value={{ result['name'] }}>
+            </div>
+          </div>
+            <!--                개수(수량,단위)-->
+            <div class="form-group row">
+                <label for="staticName" class="col-sm-2 col-form-label">개수</label>
+                <div class="col-sm-10">
+                    <input type="text" readonly class="form-control-plaintext" id="staticCount" value={{ result['count'] }}{{ result['msrmt'] }}>
+                </div>
+            </div>
+            <!--                날짜(보기 좋은 형태 new_date 값 가져오기)-->
+            <div class="form-group row">
+            <label for="staticName" class="col-sm-2 col-form-label">유통기한</label>
+            <div class="col-sm-10">
+              <input type="text" readonly class="form-control-plaintext" id="staticDate" value= {{ result['new_date'] }}>
+            </div>
+          </div>
+            <!--                메모 -->
+            <div class="form-group row">
+            <label for="staticName" class="col-sm-2 col-form-label">메모</label>
+            <div class="col-sm-10">
+              <input type="text" readonly class="form-control-plaintext" id="staticMemo" value={{ result['memo'] }}>
+            </div>
+          </div>
+        </form>
+    </div>
+    <!--        카드 하단 : 수정하기 버튼-->
+    <div class="content_footer">
+        <button type="button" id="submit" name="submit" class="btn btn-primary" onclick="to_edit()">수정하기</button>
+    </div>
+
+    </div>
+
+
+    <div class="bottom jumbotron jumbotron-fluid"></div>
+
+
+
+</body>
+</html>

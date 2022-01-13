@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <!--fonstawesome CSS-->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+    <!-- 달력관련 -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/js/tempusdominus-bootstrap-4.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/css/tempusdominus-bootstrap-4.min.css" />
+    <!-- awesome font-->
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.css" />
+
+    <!-- 구글폰트 -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR&display=swap" rel="stylesheet">
+    <!-- 로그아웃 -->
+    <script src=" https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+
+    <style>
+        * {
+            font-family: 'Jua', sans-serif;
+        }
+        .wrap {
+            width: 900px;
+            margin: auto;
+            padding-top: 50px;
+            display: grid;
+            grid-template-columns: 300px 300px 300px;
+            column-gap: 30px;
+            row-gap: 30px;
+        }
+        .top {
+            height: 200px;
+            background-color: cornflowerblue;
+        }
+        .top_left {
+            width: 65%;
+            height:100%;
+            float:left;
+            margin-left:10%;
+        }
+        .top_right {
+            width:15%;
+            height: 100%;
+            float:right;
+            margin-right:10%;
+        }
+        .btn_logout {
+            display: block;
+            width: 100px;
+            margin: 50px 0px 0px auto;
+        }
+        .btn_post {
+            display: block;
+            width: 100px;
+            margin: 10px 0px 0px auto;
+        }
+        .red {
+            color: red;
+        }
+        .bottom {
+            height: 150px;
+        }
+        .card_dday {
+            font-size:17pt;
+        }
+        .card_btn {
+            display:block;
+            width:40px;
+            margin: 0px 0px 0px auto;
+        }
+        .top_username {
+            display:inline-block;
+            margin-top: 30px;
+            color: white;
+        }
+        .cursor {
+            cursor:pointer;
+        }
+        .btn_modal_post{
+            display:block;
+            margin: auto;
+        }
+        .linebyline{
+            padding-bottom: 20px
+        }
+
+        .modal-content {
+            height: auto;
+            min-height: 80%;
+            border-radius: 20px;
+        }
+
+        .modal-dialog{
+            width: 70%;
+            height: auto;
+            min-height:80%
+        }
+
+        .modal_body_content{
+            padding-bottom: 40px;
+        }
+
+        .back {
+            background-image: url("../static/image/background.jpg");
+            background-position: center;
+            background-size: cover;
+            background-attachment: fixed;
+        }
+    </style>
+    <script>
+        function sign_out() {
+            $.removeCookie('mytoken', {path: '/'});
+            alert('로그아웃!')
+            window.location.href = "/login"
+        }
+
+
+        function postArticle() {
+                let name = $('#name').val()
+                let count = $('#count').val()
+                let msrmt = $('#msrmt').val()
+                let date = $('#date').val()
+                let memo = $('#memo').val()
+
+                $.ajax({
+                    type: "POST",
+                    url: "/board",
+                    data: {name_give: name, count_give: count, msrmt_give: msrmt, date_give:date, memo_give:memo},
+                    success: function (response) { // 성공하면
+                        alert(response["msg"]);
+                        window.location.reload();
+                    }
+                })
+            }
+
+        // 재료 삭제하기 함수, 변수는 name(재료이름) date(유통기한) msrmt(단위)
+        function delete_post(name,date,msrmt) {
+            $.ajax({
+                type: "DELETE",
+                url: "/board",
+                data: {name_give:name,date_give:date,msrmt_give:msrmt},
+                success: function (response) {         // 성공하면
+                    alert(response['msg'])             // response로 받은 'msg' 알림창에 띄우기
+                    window.location.reload()           // 페이지 새로고침
+                }
+            })
+        }
+    </script>
+
+    <title>Main | 나만의 냉장고</title>
+</head>
+
+<body class="back">
+    <!--  상단 푸른 배너  -->
+    <div class="top">
+        <!--  로고와 제목 표시하는 왼쪽 구역  -->
+        <div class="top_left">
+            <div class="top_username">
+                <h1><img src="../static/image/logo.png">{{ user_info['user_id'] }}의 냉장고</h1>
+            </div>
+        </div>
+        <!--  로그아웃 버튼과 재료 추가하기 버튼을 표시하는 오른쪽 구역  -->
+        <div class="top_right">
+            <!--  로그아웃 버튼  -->
+            <div class="btn_logout">
+                <button type="button" class="btn btn-light" onclick="sign_out()">로그아웃</button>
+            </div>
+            <!--  재료 추가하기 버튼  -->
+            <div class="btn_post">
+                <button type="button" class="btn btn-light" data-toggle="modal" data-target="#exampleModal">재료 추가하기</button>
+
+            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">재료를 추가하세요</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                      <div class="modal_body_content">
+                          <!--재료/음식 -->
+                          <div class="input-group input-group-name linebyline">
+                              <div class="input-group-prepend">
+                                  <span class="input-group-text" id="inputGroup-sizing-name">재료</span>
+                              </div>
+                              <input type="text" id="name" class="form-control" aria-label="Large"
+                                     aria-describedby="inputGroup-sizing-sm" placeholder="ex. 계란">
+                          </div>
+                          <!--수량 -->
+                          <form class="form-inline">
+                              <div class="input-group mb-2 mr-sm-2">
+                                  <div class="input-group-prepend">
+                                      <div class="input-group-text">개수</div>
+                                  </div>
+                                  <input type="text" class="form-control" id="count"
+                                         placeholder="수량 (ex.1)">
+                              </div>
+                              <input type="text" class="form-control mb-2 mr-sm-2" id="msrmt"
+                                     placeholder="단위 (ex.판)">
+                          </form>
+                          <!--유통기한 달력-->
+                          <div class="container">
+                              <div class="row">
+                                  <div class="col-sm-6">
+                                      <div class="form-group">
+                                          <div class="input-group date" id="datetimepicker4" data-target-input="nearest">
+                                              <div class="input-group-prepend">
+                                                  <span class="input-group-text" id="inputGroup-sizing-add">유통기한</span>
+                                              </div>
+                                              <input type="text" class="form-control datetimepicker-input"
+                                                     data-target="#datetimepicker4" id="date">
+                                              <div class="input-group-append " data-target="#datetimepicker4"
+                                                   data-toggle="datetimepicker">
+                                                  <div class="input-group-text "><i class="fa fa-calendar"></i></div>
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </div>
+                                  <script type="text/javascript">
+                                      $(function () {
+                                          $('#datetimepicker4').datetimepicker({
+                                              format: 'L'
+                                          });
+                                      });
+                                  </script>
+                              </div>
+                          </div>
+                          <!--메모-->
+                          <div class="input-group input-group-phone">
+                              <div class="input-group-prepend">
+                                  <span class="input-group-text" id="inputGroup-sizing-phone">메모</span>
+                              </div>
+                              <input type="text" id="memo" class="form-control" aria-label="Large"
+                                     aria-describedby="inputGroup-sizing-sm">
+                          </div>
+                      </div>
+                      <button onclick="postArticle()" type="button" class="btn btn-primary btn_modal_post">냉장고에 추가하기</button>
+                  </div>
+            </div>
+          </div>
+        </div>
+            </div>
+        </div>
+    </div>
+    <div class="wrap" id="cards_box">
+        {% for food in foods %}
+            <!--  app.py 로그인 유저 정보를 바탕으로 받아온 재료 정보에서 id(objectid),
+            user_id(유저의 id), name(재료 이름), count(개수), date(유통기한), dday(디데이 절대값), msrmt(단위 설정)  -->
+            {% set id = food['_id'] %}
+            {% set user_id = food['user_id'] %}
+            {% set name = food['name'] %}
+            {% set count = food['count'] %}
+            {% set date = food['date'] %}
+            {% set dday = food['dday'] %}
+            {% set msrmt = food['msrmt'] %}
+            <!--  date(유통기한)이 now(현재날짜)보다 빠르면  -->
+            {% if date<now %}
+                <!--  회색배경 카드 처리  -->
+                <div class="card text-white bg-secondary mb-3" style="width: 18rem;height: 200px;">
+                    <!--  카드 바디 클릭하면 카드 상세페이지로 이동  -->
+                    <div class="card-body cursor" onclick="location.href='/detail/{{ id }}'">
+                        <!--  재료의 이름,개수,단위,디데이 표시  -->
+                        <p class="card_dday">{{name}} ({{count}}{{ msrmt }})<br> D+{{dday}}</p>
+                        <!--  재료 삭제하기 버튼  -->
+                        <div class="card_btn">
+                            <button onclick="delete_post('{{name}}','{{date}}','{{ msrmt }}')" type="button" class="btn btn-light"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+                        </div>
+                    </div>
+                </div>
+            <!--  그 외의 경우에서 dday(디데이 절대값)이 4일 미만이면  -->
+            {% elif dday<4 %}
+                <!--  카드 글씨 빨간색 처리  -->
+                <div class="card red cursor" style="width: 18rem;height: 200px;">
+                    <!--  카드 바디 클릭하면 카드 상세페이지로 이동  -->
+                    <div class="card-body" onclick="location.href='/detail/{{ id }}'">
+                        <!--  재료의 이름,개수,단위,디데이 표시  -->
+                        <p class="card_dday">{{name}} ({{count}}{{ msrmt }})<br>D-{{dday}}</p>
+                        <!--  재료 삭제하기 버튼  -->
+                        <div class="card_btn">
+                            <button onclick="delete_post('{{name}}','{{date}}','{{ msrmt }}')" type="button" class="btn btn-light"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+                        </div>
+                    </div>
+                </div>
+            <!-- 그 외 (즉, 유통기한이 4일 이상 남은 경우)  -->
+            {% else %}
+                <!--  일반 카드  -->
+                <div class="card cursor" style="width: 18rem;height: 200px;">
+                    <!--  카드 바디 클릭하면 카드 상세페이지로 이동  -->
+                    <div class="card-body" onclick="location.href='/detail/{{ id }}'">
+                        <!--  재료의 이름,개수,단위,디데이 표시  -->
+                        <p class="card_dday">{{ name }} ({{ count }}{{ msrmt }})<br>D-{{ dday }}</p>
+                        <!--  재료 삭제하기 버튼  -->
+                        <div class="card_btn">
+                            <button onclick="delete_post('{{ name }}','{{ date }}','{{ msrmt }}')"
+                                    type="button" class="btn btn-light"><i class="fa fa-trash-o" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+        <div class="bottom">
+        </div>
+    </div>
+    <div class="bottom">
+    </div>
+</body>
